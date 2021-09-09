@@ -8,9 +8,9 @@ const mongoose = require("mongoose");
 const database = require("./database/database");
 
 // Models
-const BookModels = require("./database/book");
-const AuthorModels = require("./database/author");
-const PublicationModels = require("./database/publication");
+const BookModel = require("./database/book");
+const AuthorModel = require("./database/author");
+const PublicationModel = require("./database/publication");
 
 // Initialization express
 
@@ -33,7 +33,7 @@ Methods         GET
 */
 
 booky.get("/", (req, res) => {
-   // change this line
+   const getAllBooks = BookModel.
    return res.json({ books: database.books });
 });
 
