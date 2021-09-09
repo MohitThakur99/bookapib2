@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 // Publication Schema
-const PublicationSchema = mongoose.mongoose({
+const PublicationSchema = mongoose.Schema({
     id: Number,
     name: String,
     books: [String]

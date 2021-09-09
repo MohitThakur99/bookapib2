@@ -18,13 +18,13 @@
 // We need an API 
 
 // GET
-// to get all books {completed}
-// to get specific books {completed}
-// to get list of books based on category {completed}
+// to get all books {completed} {connected Database}
+// to get specific books {completed} {connected Database}
+// to get list of books based on category {completed} {connected Database}
 // to get list of books based on languages [task]
 
 // POST
-// Add new book {completed}
+// Add new book {completed} {connected Database}
 
 // PUT
 // Update book title {completed}
@@ -38,12 +38,12 @@
 // We need an API 
 
 // GET
-// to get all authors {completed}
+// to get all authors {completed} {connected Database}
 // to get specific authors [task]
 // to get list of authors based on books {completed}
 
 // POST
-// Add new author {completed}
+// Add new author {completed} {connected Database}
 
 // PUT
 // Update Author name using its id [task]

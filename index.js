@@ -20,9 +20,8 @@ const booky = express();
 booky.use(express.json());
 
 // Establish database connection
- mongoose.connect(
-   process.env.MONGO_URL,
-).then(() => console.log("connection established!!!!!!"));
+  mongoose.connect(process.env.MONGO_URL,
+).then(() => console.log("connection established!!!!!"));
 
 /*
 Route           /
@@ -32,9 +31,9 @@ Parameters      NONE
 Methods         GET
 */
 
-booky.get("/", (req, res) => {
-   const getAllBooks = BookModel.
-   return res.json({ books: database.books });
+booky.get("/", async (req, res) => {
+   const getAllBooks = await BookModel.find();
+   return res.json(getAllBooks);
 });
 
 /*
@@ -45,12 +44,13 @@ Parameters      ISBN
 Methods         GET
 */
 
-booky.get("/is/:isbn", (req, res) => {
-   const getSpecificBook = database.books.filter(
-      (book) => book.ISBN === req.params.isbn
-   );
+booky.get("/is/:isbn", async (req, res) => {
 
-   if (getSpecificBook.length === 0) {
+   const getSpecificBook = await BookModel.findOne({ISBN: req.params.isbn});
+
+   // if mongoDB does not find any adata it returns null
+
+   if (!getSpecificBook) {
       return res.json({
          error: `No book found for the ISBN of ${req.params.isbn}`,
       });
@@ -67,13 +67,13 @@ Parameters      category
 Methods         GET
 */
 
-booky.get("/c/:category", (req, res) => {
-   const getSpecificBook = database.books.filter((book) =>
-      book.category.includes(req.params.category)
-      // includes compare for book category array so that a match is found it gives true
-   );
+booky.get("/c/:category", async (req, res) => {
+   const getSpecificBook = await BookModel.findOne({ 
+      category: req.params.category,
+   });
+   
 
-   if (getSpecificBook.length === 0) {
+   if (!getSpecificBook) {
       return res.json({
          error: `No book found for the category of ${req.params.category}`,
       });
@@ -90,8 +90,9 @@ Parameters      category
 Methods         GET
 */
 
-booky.get("/author", (req, res) => {
-   return res.json({ authors: database.author });
+booky.get("/author", async (req, res) => {
+   const getAllAuthors = await AuthorModel.find();
+   return res.json({ authors: getAllAuthors });
 });
 
 /*
@@ -136,11 +137,12 @@ Parameters      NONE
 Methods         POST
 */
 
-booky.post("/book/add", (req, res) => {
+booky.post("/book/add", async (req, res) => {
    const { newBook } = req.body;
 
-   database.books.push(newBook);
-   return res.json({ books: database.books });
+   const addNewBook = BookModel.create(newBook);
+   
+   return res.json({ message: "book was added!" });
 });
 
 // Browser can only perform GET Request no other one
@@ -157,11 +159,12 @@ Parameters      NONE
 Methods         POST
 */
 
-booky.post("/author/add", (req, res) => {
+booky.post("/author/add", async (req, res) => {
    const { newAuthor } = req.body;
 
-   database.author.push(newAuthor);
-   return res.json({ authors: database.author });
+   AuthorModel.create(newAuthor);
+
+   return res.json({ message: "author was added!" });
 });
 
 /*
@@ -335,5 +338,5 @@ booky.delete("/publication/delete/book/:isbn/:pubId", (req, res) => {
    });
 });
 
-booky.listen(3000, () => console.log("Hey Server is running!"));
+booky.listen(3001, () => console.log("Hey Server is running!"));
 
