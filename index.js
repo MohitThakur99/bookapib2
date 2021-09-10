@@ -185,7 +185,7 @@ booky.put("/book/update/:isbn", async (req, res) => {
          title:req.body.newBookTitle,
       },
       {
-         new: true,
+         new: true, // to get updated data
       }
    );
 
@@ -193,31 +193,63 @@ booky.put("/book/update/:isbn", async (req, res) => {
 });
 
 /*
-Route           /book/update/author
+Route           /book/author/update
 Description     update/add new author for a book
 Access          PUBLIC
 Parameters      isbn
 Methods         PUT
 */
 
-booky.put("/book/update/author/:isbn/:authorId", (req, res) => {
-   // update book database
+booky.put("/book/author/update/:isbn", async (req, res) => {
+   //  update book database
 
-   database.books.forEach((book) => {
-      if (book.ISBN === req.params.isbn) {
-         return book.author.push(parseInt(req.params.authorId));
+   const updatedBook = await BookModel.findOneAndUpdate(
+      {
+         ISBN: req.params.isbn,
+      },
+      {
+         $addToSet: {
+           author: req.body.newAuthor,
+         },
+      }, 
+      {    
+         new: true,
       }
-   });
+   );
+
+   // database.books.forEach((book) => {
+   //    if (book.ISBN === req.params.isbn) {
+   //       return book.author.push(parseInt(req.params.authorId));
+   //    }
+   // });
 
    // update author database
 
-   database.author.forEach((author) => {
-      if (author.id === parseInt(req.params.authorId)) {
-         return author.books.push(req.params.isbn);
+   const updatedAuthor = await AuthorModel.findOneAndUpdate(
+      {
+         id: req.body.newAuthor,
+      },
+      {   
+         $addToSet: {
+            books: req.params.isbn,
+         },
+      },
+      {
+         new: true,
       }
-   });
+   );
 
-   return res.json({ books: database.books, author: database.author });
+   // database.author.forEach((author) => {
+   //    if (author.id === parseInt(req.params.authorId)) {
+   //       return author.books.push(req.params.isbn);
+   //    }
+   // });
+
+   return res.json({ 
+      books: updatedBook, 
+      author: updatedAuthor,
+      message: "New Author was added", 
+   });
 });
 
 /*
