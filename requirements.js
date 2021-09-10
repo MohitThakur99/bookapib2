@@ -27,7 +27,7 @@
 // Add new book {completed} {connected Database}
 
 // PUT
-// Update book title {completed}
+// Update book title {completed} {connected Database}
 // update/add new author {completed}
 
 // DELETE
