@@ -31,7 +31,7 @@
 // update/add new author {completed} {connected Database}
 
 // DELETE
-// delete a book {completed}
+// delete a book {completed} {connected Database}
 // delete an author from a book {completed}
 
 // Authors
